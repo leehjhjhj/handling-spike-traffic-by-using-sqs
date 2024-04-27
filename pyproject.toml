@@ -11,6 +11,8 @@ fastapi = "^0.110.2"
 uvicorn = "^0.29.0"
 starlette = "^0.37.2"
 asyncio = "^3.4.3"
+locust = "^2.26.0"
+aioboto3 = "^12.4.0"
 
 
 [build-system]
