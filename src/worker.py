@@ -4,12 +4,16 @@ from common.with_timeout import with_timeout
 
 class SimpleSQSTicketWorker:
     def __init__(self):
-        self._sqs = boto3.client('sqs', region_name='ap-northeast-2', aws_access_key_id=os.environ['AWS_ACCESS_KEY'], aws_secret_access_key=os.environ['AWS_SECRET_KEY'])
+        self._sqs = boto3.client(
+            'sqs',
+            region_name='ap-northeast-2',
+            aws_access_key_id=os.environ['AWS_ACCESS_KEY'],
+            aws_secret_access_key=os.environ['AWS_SECRET_KEY'])
         self._queue_url = os.environ['SQS_QUEUE_URL']
 
     def process_message(self, message):
         # 타임아웃 테스트
-        time.sleep(3)
+        # time.sleep(3)
         body = json.loads(message['Body'])
         print(f"Processing message: {body}")
 
