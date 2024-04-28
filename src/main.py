@@ -1,17 +1,19 @@
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-import asyncio
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+from dotenv import load_dotenv
+from schema import TicketRequest
+from worker import SimpleSQSTicketWorker
 
 app = FastAPI()
 
-origins = [
-    "*",
-]
+load_dotenv()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.get("/start-polling")
+async def start_polling(background_tasks: BackgroundTasks):
+    worker = SimpleSQSTicketWorker()
+    background_tasks.add_task(worker.poll_sqs_messages)
+    return {"message": "Started polling SQS messages in the background"}
+
+@app.post("/tickets/purchase")
+def purchase_ticket(ticket_request: TicketRequest):
+    print(f"Processing message: {ticket_request}")
+    return ticket_request
