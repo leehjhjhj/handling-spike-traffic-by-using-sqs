@@ -1,5 +1,6 @@
 import time, json, os, boto3, asyncio
 from common.errors.exception import TimeoutException
+from common.with_timeout import with_timeout
 
 class SimpleSQSTicketWorker:
     def __init__(self):
@@ -7,6 +8,8 @@ class SimpleSQSTicketWorker:
         self._queue_url = os.environ['SQS_QUEUE_URL']
 
     def process_message(self, message):
+        # 타임아웃 테스트
+        time.sleep(3)
         body = json.loads(message['Body'])
         print(f"Processing message: {body}")
 
@@ -20,7 +23,7 @@ class SimpleSQSTicketWorker:
             messages = response.get('Messages', [])
             for message in messages:
                 try:
-                    self.process_message(message) # with_timeout 추가해야함
+                    with_timeout(self.process_message, timeout=2, message=message)
                     self._sqs.delete_message(
                         QueueUrl=self._queue_url,
                         ReceiptHandle=message['ReceiptHandle']
