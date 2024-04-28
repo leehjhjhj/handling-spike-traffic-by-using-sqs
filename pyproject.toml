@@ -13,6 +13,7 @@ starlette = "^0.37.2"
 asyncio = "^3.4.3"
 locust = "^2.26.0"
 aioboto3 = "^12.4.0"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
