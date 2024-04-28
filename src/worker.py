@@ -1,5 +1,5 @@
 import time, json, os, boto3, asyncio
-from exception import TimeoutException
+from common.errors.exception import TimeoutException
 
 class SimpleSQSTicketWorker:
     def __init__(self):
